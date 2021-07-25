@@ -23,10 +23,12 @@ class Object_Detector():
     MOUSE_MIDDLEUP = 0x0040     # middle button up 
 
     SHOULD_RUN = True
+    FPS = 15
 
-    def __init__(self, target_path:str):
+    def __init__(self, target_path:str, equality=0.7):
         self.target_path = target_path
         self.cool_down = [None, 5]    # start, limit
+        self.equality = equality
 
         # init target
         if not self.target_path.endswith(".jpg"):  
@@ -43,7 +45,8 @@ class Object_Detector():
 
         self.method = cv.TM_CCOEFF_NORMED
 
-    def work(self):
+    def detect(self) -> bool:
+        #while Object_Detector.SHOULD_RUN:
         loop_begin = time()
         ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
         #screenshot = pag.screenshot()
@@ -51,46 +54,14 @@ class Object_Detector():
         #cv_img = self.window_capture()
         cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
         #cv.imshow('Object-Detector', cv_img)
-        point = self.find_click_pos(haystack_img=cv_img, threshold=0.7, debug_mode=None)
-        self.click(point)
-        #print(pag.position())
+        point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
+        if len(point) > 0:
+            return True
+        else:
+            return False
 
-        try:
-            pass
-            #print(f"FPS {1 / (time()-loop_begin)}")
-        except ZeroDivisionError:
-            print("FPS 0")
-
-        if cv.waitKey(1) == ord('q'):
-            cv.destroyAllWindows()
-
-    def detect(self):
-        while Object_Detector.SHOULD_RUN:
-            loop_begin = time()
-            ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
-            #screenshot = pag.screenshot()
-            screenshot = ImageGrab.grab()
-            #cv_img = self.window_capture()
-            cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-            #cv.imshow('Object-Detector', cv_img)
-            point = self.find_click_pos(haystack_img=cv_img, threshold=0.7, debug_mode=None)
-            self.click(point)
-            #print(pag.position())
-
-            try:
-                pass
-                #print(f"FPS {1 / (time()-loop_begin)}")
-            except ZeroDivisionError:
-                print("FPS 0")
-
-            if cv.waitKey(1) == ord('q'):
-                cv.destroyAllWindows()
-                break
-        cv.destroyAllWindows()
-
-        print("I'm finish!")
-
-    def find_click_pos(self, haystack_img, threshold=0.5, debug_mode=None):
+    def find_click_pos(self, haystack_img, debug_mode=None):
+        threshold = self.equality
         result = cv.matchTemplate(haystack_img, self.target_img, self.method)
 
         locations = np.where(result >= threshold)
@@ -160,6 +131,28 @@ class Object_Detector():
                 pag.moveTo(p1, p2)
                 pag.click(p1, p2)
             pag.moveTo(old_pos)
+
+    def find_and_click(self):
+        ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
+        #screenshot = pag.screenshot()
+        screenshot = ImageGrab.grab()
+        #cv_img = self.window_capture()
+        cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
+        #cv.imshow('Object-Detector', cv_img)
+        point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
+        self.click(point)
+
+    def find_and_move(self):
+        ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
+        #screenshot = pag.screenshot()
+        screenshot = ImageGrab.grab()
+        #cv_img = self.window_capture()
+        cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
+        #cv.imshow('Object-Detector', cv_img)
+        point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
+        x_scale = 1920
+        p1 = point[0][0] - x_scale
+        p2 = point[0][1]
 
 # Testing
 if __name__ == "__main__":
