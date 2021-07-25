@@ -1,5 +1,5 @@
 from object_detection import Object_Detector
-from youtbue_bot import Youtube_Bot
+from youtube_bot import Youtube_Bot
 import threading
 import keyboard
 
@@ -16,7 +16,7 @@ class Bot_System(object):
         while True:
             user_input = input("User Input: ")
             try:
-                self.commands[user_input]()
+                self.commands[user_input.replace(" ", "")]()
             except KeyError:
                 print(f"----> There is not Keyword '{user_input}'")
                 print(f"----> Type 'help' for more informations!")

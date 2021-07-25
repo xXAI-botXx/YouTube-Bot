@@ -1,0 +1,1 @@
+D:\Informatik\Programmieren\Python\YouTube-Bot>pyinstaller -D -c main.py

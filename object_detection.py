@@ -6,7 +6,7 @@ import cv2 as cv    # pip install opencv-python
 import pyautogui as pag
 from PIL import ImageGrab, Image    # pip install pillow
 from functools import partial
-import win32gui    # pip install pywin32
+#import win32gui    # pip install pywin32
 #from pywinauto import mouse
 import pywinauto
 import numpy as np
@@ -27,7 +27,6 @@ class Object_Detector():
 
     def __init__(self, target_path:str, equality=0.7):
         self.target_path = target_path
-        self.cool_down = [None, 5]    # start, limit
         self.equality = equality
 
         # init target
@@ -35,6 +34,8 @@ class Object_Detector():
             img = Image.open(self.target_path).convert('RGB')
             needle_img_path = ".".join(self.target_path.split(".")[:-1])+".jpg"
             img.save(needle_img_path)
+        else:
+            needle_img_path = target_path
 
         self.target_img = cv.imread(needle_img_path, cv.IMREAD_UNCHANGED)
         #if(needle_img is not None):
@@ -46,8 +47,6 @@ class Object_Detector():
         self.method = cv.TM_CCOEFF_NORMED
 
     def detect(self) -> bool:
-        #while Object_Detector.SHOULD_RUN:
-        loop_begin = time()
         ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
         #screenshot = pag.screenshot()
         screenshot = ImageGrab.grab()
@@ -109,28 +108,20 @@ class Object_Detector():
         return points
 
     def click(self, point):    # [(1853, 146), (3743, 547)]    Point(x=-61, y=144)
-        if len(point) >= 1:
-            # libs for clicking = pyautogui, pywinauto, ctypes.windll
-            old_pos = pag.position()
-            # img started by 0 and pos does not
-            x_scale = 1920
-            p1 = point[0][0] - x_scale
-            p2 = point[0][1]
-        
-            if self.cool_down[0] == None:
-                self.cool_down[0] = time()
-                #print(point)
-                #pywinauto.mouse.move(coords=(p1, p2))
-                #ctypes.windll.user32.SetCursorPos(p1, p2)
-                #ctypes.windll.user32.mouse_event(Object_Detector.MOUSE_LEFTDOWN)
-                #ctypes.windll.user32.mouse_event(Object_Detector.MOUSE_LEFTUP)
-                pag.moveTo(p1, p2)
-                pag.click(p1, p2)    # auto move
-            elif time() - self.cool_down[0] > self.cool_down[1]:
-                self.cool_down[0] = None
-                pag.moveTo(p1, p2)
-                pag.click(p1, p2)
-            pag.moveTo(old_pos)
+        try:
+            if len(point) > 0:
+                if len(point[0]) >= 2:
+                    # libs for clicking = pyautogui, pywinauto, ctypes.windll
+                    old_pos = pag.position()
+                    # img started by 0 and pos does not
+                    x_scale = 1920
+                    p1 = point[0][0] - x_scale
+                    p2 = point[0][1]
+                    pag.moveTo(p1, p2)
+                    pag.click(p1, p2)
+                    pag.moveTo(old_pos)
+        except IndexError:
+            print("Error: no point to click")
 
     def find_and_click(self):
         ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
@@ -150,9 +141,15 @@ class Object_Detector():
         cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
         #cv.imshow('Object-Detector', cv_img)
         point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
-        x_scale = 1920
-        p1 = point[0][0] - x_scale
-        p2 = point[0][1]
+        try:
+            if len(point) > 0:
+                if len(point[0]) >= 2:
+                    x_scale = 1920
+                    p1 = point[0][0] - x_scale
+                    p2 = point[0][1]
+                    pag.moveTo(p1, p2)
+        except IndexError:
+            print("Error: no point to click")
 
 # Testing
 if __name__ == "__main__":
