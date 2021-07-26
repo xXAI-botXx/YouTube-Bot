@@ -112,10 +112,10 @@ class Bot_System(object):
 
 class Bot_System_GUI(object):
     def __init__(self, viewer):
-        self.bot = Youtube_Bot(debug_mode=False, viewer=viewer)
+        self.bot = Youtube_Bot(debug_mode=True, viewer=viewer)
         self.is_running = False
         self.t = None
-        self.debug_mode = False
+        self.debug_mode = True
         self.viewer = viewer
         self.history = ""
 

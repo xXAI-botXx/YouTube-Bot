@@ -145,8 +145,9 @@ class Youtube_Bot():
                     #sleep(1)    # FIXME -> mit FPS
 
     def print_out(self, txt):
-        if self.viewer == None:
-            print(txt)
-        else:
-            #self.output_var.set(self.output_var.get()+"\n"+txt)
-            self.viewer.write_in_output(txt)
+        if Object_Detector.SHOULD_RUN == True:
+            if self.viewer == None:
+                print(txt)
+            else:
+                #self.output_var.set(self.output_var.get()+"\n"+txt)
+                self.viewer.write_in_output(txt)
