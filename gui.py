@@ -161,6 +161,18 @@ class Bot_Viewer(tk.Frame):
     def clear_output(self):
         self.output = ""
 
+def start():
+    root = tk.Tk()
+    root.geometry("800x400")
+    root.title("YouTube Advertising Bot")
+    #root.wm_attributes('-fullscreen','true')
+    #root.wm_attributes('-type', 'splash')
+    #root.overrideredirect(True)
+    viewer = Bot_Viewer(root)
+    viewer.pack(expand=True, fill=tk.BOTH)
+    root.bind('<Key>', viewer.key_pressed)
+    root.mainloop()
+
 
 if __name__ == "__main__":
     root = tk.Tk()

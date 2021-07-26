@@ -3,6 +3,7 @@ from youtube_bot import Youtube_Bot
 import threading
 import keyboard
 from datetime import datetime as dt
+import gui
 
 class Bot_System(object):
     def __init__(self):
@@ -199,5 +200,8 @@ class Bot_System_GUI(object):
         return self.history
 
 if __name__ == "__main__":
-    #keyboard.on_press_key("q", lambda _:exit)
-    Bot_System().main()
+    # Bot Command Line:
+    #Bot_System().main()
+    
+    # Bot GUI:
+    gui.start()
