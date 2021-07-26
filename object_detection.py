@@ -1,14 +1,13 @@
 # Source:
 # - https://www.youtube.com/watch?v=7k4j-uL8WSQ
 
-import ctypes
 import cv2 as cv    # pip install opencv-python
 import pyautogui as pag
 from PIL import ImageGrab, Image    # pip install pillow
 from functools import partial
 #import win32gui    # pip install pywin32
 #from pywinauto import mouse
-import pywinauto
+#import pywinauto
 import numpy as np
 from time import time
 #import os
