@@ -37,7 +37,7 @@ class Music_Player():
     def __init__(self):
         self.timer = Timer()
         self.song = None
-        self.songs = ["DATA/MUSIC/song_1.wav", "DATA/MUSIC/song_2.wav", "DATA/MUSIC/song_3.wav", "DATA/MUSIC/song_4.wav", "DATA/MUSIC/song_5.wav", "DATA/MUSIC/song_6.wav", "DATA/MUSIC/song_7.wav", "DATA/MUSIC/song_8.wav"]
+        self.songs = ["DATA/MUSIC/song_1.wav", "DATA/MUSIC/song_2.wav", "DATA/MUSIC/song_3.wav"]
         self.last_song = ""
         self.is_playing = False
         self.play_thread = None
