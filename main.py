@@ -27,6 +27,7 @@ class Bot_System(object):
             self.is_running = True
             self.should_run = True
             self.t = threading.Thread(target=lambda: self.bot.run())
+            Object_Detector.SHOULD_RUN = True
             if self.debug_mode:    # to get out
                 print("----> Bot is now running")
                 print(self.bot.debug_mode)
