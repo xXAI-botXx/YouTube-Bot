@@ -37,7 +37,7 @@ class Music_Player():
     def __init__(self):
         self.timer = Timer()
         self.song = None
-        self.songs = ["DATA/MUSIC/song_1.wav", "DATA/MUSIC/song_2.wav", "DATA/MUSIC/song_3.wav"]
+        self.songs = ["DATA/MUSIC/song_2.wav", "DATA/MUSIC/oogway_ascends.wav"]
         self.last_song = ""
         self.is_playing = False
         self.play_thread = None
@@ -56,7 +56,7 @@ class Music_Player():
         duration = frames / float(rate)
 
         # play and start a Timer
-        self.timer.start(duration, lambda:self.play())
+        self.timer.start(duration, lambda:self.stop())
         winsound.PlaySound(self.song, winsound.SND_ASYNC)
 
     def play(self):

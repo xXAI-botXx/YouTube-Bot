@@ -111,6 +111,7 @@ class Bot_Viewer(tk.Frame):
         self.should_coloring = True
         self.output = ""
         self.pause = False
+        self.stop = False
         self.music_on = False
         self.history_is_shown = False
         self.buttons = []
@@ -175,10 +176,12 @@ class Bot_Viewer(tk.Frame):
             self.after(200, self.color_update)
 
     def event_run(self):
+        self.stop = False
         self.control.run()
         #self.control.debug()
 
     def event_stop(self):
+        self.stop = True
         self.control.stop()
 
     def event_pause(self):

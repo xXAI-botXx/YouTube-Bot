@@ -7,7 +7,7 @@ class Mute_Bot():
         self.anzeige_detector = Object_Detector(target_path, equality=0.7)
         self.mute_on_detector = Object_Detector(target_2_path, equality=0.9)
         self.mute_off_detector = Object_Detector(target_3_path, equality=0.9)
-        self.play_detector = Object_Detector(target_4_path, equality=0.6)
+        #self.play_detector = Object_Detector(target_4_path, equality=0.6)
         self.in_advertising = False
         self.viewer = viewer
 
@@ -39,13 +39,13 @@ class Mute_Bot():
             self.in_advertising = True
             self.mute_on()
             pag.moveTo(old_pos)
-            self.print_out("#Mute-Bot: You are in advertising and i turned off the sound.")
+            self.print_out("\n#Mute-Bot: You are in advertising and i turned off the sound.")
         elif not anzeige_appear and self.in_advertising:
             self.in_advertising = False
             self.mute_off()
-            self.print_out("#Mute-Bot: You are out of advertising and i turned on the sound.")
+            self.print_out("\n#Mute-Bot: You are out of advertising and i turned on the sound.")
         else:
-            self.print_out("#Mute-Bot: No Advertising no problems...")
+            self.print_out("\n#Mute-Bot: No Advertising no problems...")
 
     def mute_on(self):
         if not self.mute_on_detector.detect():
@@ -56,11 +56,12 @@ class Mute_Bot():
             self.mute_on_detector.find_and_click()
 
     def print_out(self, txt):
-        if self.viewer == None:
-            print(txt)
-        else:
-            #self.output_var.set(self.output_var.get()+"\n"+txt)
-            self.viewer.write_in_output(txt)
+        if Object_Detector.SHOULD_RUN == True and self.viewer.stop == False:
+            if self.viewer == None:
+                print(txt)
+            else:
+                #self.output_var.set(self.output_var.get()+"\n"+txt)
+                self.viewer.write_in_output(txt)
 
 
 class Advertising_Skip_Bot():
@@ -83,11 +84,12 @@ class Advertising_Skip_Bot():
         self.skip_detector.find_and_click()
 
     def print_out(self, txt):
-        if self.viewer == None:
-            print(txt)
-        else:
-            #self.output_var.set(self.output_var.get()+"\n"+txt)
-            self.viewer.write_in_output(txt)
+        if Object_Detector.SHOULD_RUN == True and self.viewer.stop == False:
+            if self.viewer == None:
+                print(txt)
+            else:
+                #self.output_var.set(self.output_var.get()+"\n"+txt)
+                self.viewer.write_in_output(txt)
 
 
 class Advertising_Banner_Bot():
@@ -108,11 +110,12 @@ class Advertising_Banner_Bot():
         self.advertising_banner_white_detector.find_and_click()
 
     def print_out(self, txt):
-        if self.viewer == None:
-            print(txt)
-        else:
-            #self.output_var.set(self.output_var.get()+"\n"+txt)
-            self.viewer.write_in_output(txt)
+        if Object_Detector.SHOULD_RUN == True and self.viewer.stop == False:
+            if self.viewer == None:
+                print(txt)
+            else:
+                #self.output_var.set(self.output_var.get()+"\n"+txt)
+                self.viewer.write_in_output(txt)
 
 
 class Youtube_Bot():
@@ -130,13 +133,13 @@ class Youtube_Bot():
             
             if self.debug_mode:
                 if self.youtube_logo_black_bot.detect() or self.youtube_logo_white_bot.detect():
-                    self.print_out("YouTube detected...checking process:")
+                    self.print_out("\nYouTube detected...checking process:")
                     self.advertising_skip_bot.run_debug()
                     self.mute_bot.run_debug()
                     self.advertising_banner_bot.run_debug()
                     #sleep(1)    # FIXME -> mit FPS
                 else:
-                    self.print_out("YouTube not detected...")
+                    self.print_out("\nYouTube not detected...")
             else:
                 if self.youtube_logo_black_bot.detect() or self.youtube_logo_white_bot.detect():
                     self.advertising_skip_bot.run()
@@ -145,7 +148,7 @@ class Youtube_Bot():
                     #sleep(1)    # FIXME -> mit FPS
 
     def print_out(self, txt):
-        if Object_Detector.SHOULD_RUN == True:
+        if Object_Detector.SHOULD_RUN == True and self.viewer.stop == False:
             if self.viewer == None:
                 print(txt)
             else:
