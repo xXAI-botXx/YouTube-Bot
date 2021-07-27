@@ -4,7 +4,6 @@ import random
 import time
 import wave
 import contextlib
-#import queue
 
 class Timer():
 
@@ -99,15 +98,4 @@ class Music_Player():
         self.is_playing = False
         winsound.PlaySound(None, winsound.SND_PURGE)
         self.timer.stop()
-
-    def thread_function(self):
-        while self.is_playing:
-            if not self.in_song:
-                self.in_song = True
-                self.song = random.choice(self.songs)
-                while self.song == self.last_song:
-                    self.song = random.choice(self.songs)
-                #winsound.PlaySound(self.song, winsound.SND_FILENAME)
-                winsound.PlaySound(self.song, winsound.SND_ASYNC)
-
     

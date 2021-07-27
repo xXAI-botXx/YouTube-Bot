@@ -34,7 +34,6 @@ class Bot_System(object):
                 print(self.bot.debug_mode)
                 self.t.start()
                 keyboard.wait("q")
-                #self.exit()
                 self.stop()
             else:
                 self.t.start()
@@ -48,8 +47,6 @@ class Bot_System(object):
             self.should_run = True
             Object_Detector.SHOULD_RUN = False    # should stop bzw. kill the threads
             self.t.join()
-            # sind Threads nun gewschlossen? wie kann man prüfen? schau im Buch!
-            #print(self.t.is_alive())
             print("----> Bot is stopped")
         else:
             print("----> Bot is still stopped")
@@ -141,9 +138,6 @@ class Bot_System_GUI(object):
             self.print_out("----> Try to stop the bot")
             self.is_running = False
             Object_Detector.SHOULD_RUN = False    # should stop bzw. kill the threads
-            # FIXME
-            #self.t.join()
-            # sind Threads nun gewschlossen? wie kann man prüfen? schau im Buch!
             self.print_out("----> Bot is stopped")
         else:
             self.print_out("----> Bot is still stopped")

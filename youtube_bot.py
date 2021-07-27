@@ -1,5 +1,4 @@
 from object_detection import Object_Detector
-from time import sleep
 import pyautogui as pag
 
 class Mute_Bot():
@@ -7,7 +6,6 @@ class Mute_Bot():
         self.anzeige_detector = Object_Detector(target_path, equality=0.7)
         self.mute_on_detector = Object_Detector(target_2_path, equality=0.9)
         self.mute_off_detector = Object_Detector(target_3_path, equality=0.9)
-        #self.play_detector = Object_Detector(target_4_path, equality=0.6)
         self.in_advertising = False
         self.viewer = viewer
 
@@ -60,7 +58,6 @@ class Mute_Bot():
             if self.viewer == None:
                 print(txt)
             else:
-                #self.output_var.set(self.output_var.get()+"\n"+txt)
                 self.viewer.write_in_output(txt)
 
 
@@ -88,7 +85,6 @@ class Advertising_Skip_Bot():
             if self.viewer == None:
                 print(txt)
             else:
-                #self.output_var.set(self.output_var.get()+"\n"+txt)
                 self.viewer.write_in_output(txt)
 
 
@@ -114,7 +110,6 @@ class Advertising_Banner_Bot():
             if self.viewer == None:
                 print(txt)
             else:
-                #self.output_var.set(self.output_var.get()+"\n"+txt)
                 self.viewer.write_in_output(txt)
 
 
@@ -137,7 +132,6 @@ class Youtube_Bot():
                     self.advertising_skip_bot.run_debug()
                     self.mute_bot.run_debug()
                     self.advertising_banner_bot.run_debug()
-                    #sleep(1)    # FIXME -> mit FPS
                 else:
                     self.print_out("\nYouTube not detected...")
             else:
@@ -145,12 +139,10 @@ class Youtube_Bot():
                     self.advertising_skip_bot.run()
                     self.mute_bot.run()
                     self.advertising_banner_bot.run()
-                    #sleep(1)    # FIXME -> mit FPS
 
     def print_out(self, txt):
         if Object_Detector.SHOULD_RUN == True and self.viewer.stop == False:
             if self.viewer == None:
                 print(txt)
             else:
-                #self.output_var.set(self.output_var.get()+"\n"+txt)
                 self.viewer.write_in_output(txt)

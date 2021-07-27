@@ -5,24 +5,11 @@ import cv2 as cv    # pip install opencv-python
 import pyautogui as pag
 from PIL import ImageGrab, Image    # pip install pillow
 from functools import partial
-#import win32gui    # pip install pywin32
-#from pywinauto import mouse
-#import pywinauto
 import numpy as np
-from time import time
-#import os
 
 class Object_Detector():
 
-    MOUSE_LEFTDOWN = 0x0002     # left button down 
-    MOUSE_LEFTUP = 0x0004       # left button up 
-    MOUSE_RIGHTDOWN = 0x0008    # right button down 
-    MOUSE_RIGHTUP = 0x0010      # right button up 
-    MOUSE_MIDDLEDOWN = 0x0020   # middle button down 
-    MOUSE_MIDDLEUP = 0x0040     # middle button up 
-
     SHOULD_RUN = True
-    FPS = 15
 
     def __init__(self, target_path:str, equality=0.7):
         self.target_path = target_path
@@ -37,8 +24,6 @@ class Object_Detector():
             needle_img_path = target_path
 
         self.target_img = cv.imread(needle_img_path, cv.IMREAD_UNCHANGED)
-        #if(needle_img is not None):
-        #    cv.cvtColor(needle_img, cv.COLOR_BGR2GRAY)
 
         self.target_w = self.target_img.shape[1]
         self.target_h = self.target_img.shape[0]
@@ -47,11 +32,8 @@ class Object_Detector():
 
     def detect(self) -> bool:
         ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
-        #screenshot = pag.screenshot()
         screenshot = ImageGrab.grab()
-        #cv_img = self.window_capture()
         cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-        #cv.imshow('Object-Detector', cv_img)
         point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
         if len(point) > 0:
             return True
@@ -101,12 +83,10 @@ class Object_Detector():
 
         if debug_mode:
             cv.imshow('Matches', haystack_img)
-            #cv.waitKey()
-            #cv.imwrite('result_click_point.jpg', haystack_img)
 
         return points
 
-    def click(self, point):    # [(1853, 146), (3743, 547)]    Point(x=-61, y=144)
+    def click(self, point):
         try:
             if len(point) > 0:
                 if len(point[0]) >= 2:
@@ -124,21 +104,16 @@ class Object_Detector():
 
     def find_and_click(self):
         ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
-        #screenshot = pag.screenshot()
+        # libs for screenshoting: pyautogui, PIL, win32
         screenshot = ImageGrab.grab()
-        #cv_img = self.window_capture()
         cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-        #cv.imshow('Object-Detector', cv_img)
         point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
         self.click(point)
 
     def find_and_move(self):
         ImageGrab.grab = partial(ImageGrab.grab, all_screens=True)
-        #screenshot = pag.screenshot()
         screenshot = ImageGrab.grab()
-        #cv_img = self.window_capture()
         cv_img = cv.cvtColor(np.array(screenshot), cv.COLOR_RGB2BGR)
-        #cv.imshow('Object-Detector', cv_img)
         point = self.find_click_pos(haystack_img=cv_img, debug_mode=None)
         try:
             if len(point) > 0:
@@ -152,5 +127,4 @@ class Object_Detector():
 
 # Testing
 if __name__ == "__main__":
-    #list(map(lambda x: print(x) if len(x) > 0 else True, wr.Window_Finder().list_windownames()))
     Object_Detector("DATA/test_target.png").detect()

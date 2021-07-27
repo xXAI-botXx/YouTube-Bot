@@ -6,19 +6,13 @@ from time import time
 from PIL import Image, ImageTk
 import music
 
-def rgb2hex_alt(rgb):
-    """translates an rgb tuple of int to a tkinter friendly color code
-    """
-    r, g, b = rgb
-    return f'#{r:02x}{g:02x}{b:02x}'
-
 def rgb2hex(r, g, b):
-    """translates an rgb tuple of int to a tkinter friendly color code
-    """
+    """translates an r, g, b of int to a tkinter friendly color code"""
     hex_n = format(r, 'x') + format(g, 'x') + format(b, 'x')
     return f'#{hex_n}'
 
 def hex2rgb(x):
+    """translates an hex of str to a rgb color code"""
     x = x.replace("#", "")
     x = x.replace("0x", "")
     r = x[0:2]
@@ -38,7 +32,7 @@ class Widget_With_Space(tk.Frame):
         self.yspace = yspace
         
         if command == None:    # no btn
-            self.widget = widget(self, bg=bg, state="disabled")    #justify=tk.LEFT
+            self.widget = widget(self, bg=bg, state="disabled")
         else:
             if img != None:
                 self.widget = widget(self, text=text, bg=bg, command=command, image=img)
@@ -53,7 +47,6 @@ class Widget_With_Space(tk.Frame):
     def on_enter(self, event):
         self.is_hovered = True
         btn = event.widget
-        #btn.config(bg=self.btn_color_2)
         btn.config(bg="#FA5858")
 
     def on_leave(self, event):
@@ -64,12 +57,6 @@ class Widget_With_Space(tk.Frame):
     def write(self, txt):
         self.widget.config(state="normal")
         self.widget.delete("0.0", self.widget.index("end"))
-
-        #splitted_txt = []
-        #for x in txt.split("\n"):
-        #    if len(x) < 1:
-        #        continue
-        #    splitted_txt += [x] 
 
         new_txt = ""
         for i, x in enumerate(txt.split("\n")):
@@ -97,7 +84,7 @@ class Bot_Viewer(tk.Frame):
         super().__init__(parent)
         self.music_player = music_player
         self.rows = 4
-        self.columns = 3 #2
+        self.columns = 3 
         self.control = main.Bot_System_GUI(self)
         r = random.randint(30, 255)
         g = random.randint(30, 255)
@@ -106,7 +93,7 @@ class Bot_Viewer(tk.Frame):
         self.r_reduce = random.randint(-5, 5)
         self.g_reduce = random.randint(-5, 5)
         self.b_reduce = random.randint(-5, 5)
-        self.btn_color = rgb2hex(r, g, b)  # random init
+        self.btn_color = rgb2hex(r, g, b)
         self.btn_color_2 = rgb2hex(r-self.color_factor, g-self.color_factor, b-self.color_factor)
         self.should_coloring = True
         self.output = ""
@@ -120,13 +107,9 @@ class Bot_Viewer(tk.Frame):
         self.after(1000, self.color_update)
 
     def build_widgets(self):
-        # -> farbe soll sich verändern, aber evtl immer nur blasse farben
-        #self.label_output = Widget_With_Space(tk.Label, self.output, "#BDBDBD", xspace=(10, 10), yspace=(10, 10), parent=self)
-        #self.label_output.grid(row=0, column=1, rowspan=4, sticky='NESW') #, padx=(50, 0))
         self.txt_output = Widget_With_Space(tk.Text, "", "#BDBDBD", xspace=(10, 10), yspace=(10, 10), parent=self)
         self.txt_output.grid(row=0, column=1, rowspan=4, sticky='NESW') #, padx=(50, 0))
         self.txt_output.set_color(self.btn_color, self.btn_color_2)
-        # Am Anfang Bot Explaination hinzufügen
         self.output += f"Bot-System is now live ({dt.now().hour:02}:{dt.now().minute:02} Clock)"
         self.write_in_output()
 
@@ -136,7 +119,6 @@ class Bot_Viewer(tk.Frame):
         self.btn_coloring.set_color(self.btn_color, self.btn_color_2)
         self.buttons += [self.btn_coloring]
 
-        #self.btn_run = tk.Button(self, text='run', bg='#FA5858', command=self.event_run)
         self.btn_run = Widget_With_Space(tk.Button, text='run', bg=self.btn_color, command=self.event_run, xspace=(10, 10), yspace=(10, 10), parent=self)
         self.btn_run.grid(row=0, column=0, sticky='NESW') 
         self.btn_run.set_color(self.btn_color, self.btn_color_2)
@@ -203,13 +185,8 @@ class Bot_Viewer(tk.Frame):
                 self.out(history)
 
     def event_exit(self):
-        #exit(0)
         self.music_player.stop()
         self.control.exit()
-
-    def key_pressed(self, key):
-        input = key.char
-        #...
 
     def write_in_output(self, txt=""):
         self.output = (self.output+"\n"+txt).strip()
@@ -276,7 +253,6 @@ class Intro(tk.Frame):
         self.music_player = music.Music_Player()
         self.labels = []
         self.images = []
-        #self.img_0 = tk.PhotoImage(file="DATA/INTRO/anzeige.jpg")
         self.img_0 = ImageTk.PhotoImage(Image.open("DATA/INTRO/anzeige.jpg"))
         self.images += [self.img_0]
         self.img_1 = ImageTk.PhotoImage(Image.open("DATA/INTRO/ueberspringen.jpg"))
@@ -319,7 +295,6 @@ class Intro(tk.Frame):
         self.music_player.play_and_stop("DATA/MUSIC/kluck.wav")
         viewer = Bot_Viewer(self.parent, self.music_player)
         viewer.pack(expand=True, fill=tk.BOTH)
-        self.parent.bind('<Key>', viewer.key_pressed)
 
     def on_click(self, event):
         self.in_intro = False
@@ -340,10 +315,3 @@ def start():
 
 if __name__ == "__main__":
     start()
-
-    # Testing
-    #root = tk.Tk()
-    #MyLabel = tk.Label(text="Moin", bg="red")#.pack(expand=True, fill=tk.BOTH)
-    #MyLabelSpaced = Widget_With_Space(MyLabel, xspace=5, yspace=100, parent=root)
-    #MyLabelSpaced.pack(expand=True, fill=tk.BOTH)
-    #root.mainloop()
